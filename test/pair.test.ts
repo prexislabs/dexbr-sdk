@@ -1,8 +1,8 @@
 import { ChainId, Token, Pair, TokenAmount, CGLD as _CGLD, cUSD as _cUSD, Price } from '../src'
 
 describe('Pair', () => {
-  const cUSD = new Token(ChainId.MAINNET, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 18, 'cUSD', 'Celo USD')
-  const CGLD = new Token(ChainId.MAINNET, '0x6B175474E89094C44Da98b954EedeAC495271d0F', 18, 'CGLD', 'Celo')
+  const cUSD = new Token(ChainId.MAINNET, _cUSD[ChainId.MAINNET].address, 18, 'cUSD', 'Celo USD')
+  const CGLD = new Token(ChainId.MAINNET, _CGLD[ChainId.MAINNET].address, 18, 'CGLD', 'Celo')
 
   describe('constructor', () => {
     it('cannot be used for tokens on different chains', () => {
@@ -15,7 +15,7 @@ describe('Pair', () => {
   describe('#getAddress', () => {
     // TODO: Fix this test once the pair has been created on mainnet
     it('returns the correct address', () => {
-      expect(Pair.getAddress(cUSD, CGLD)).toEqual('0xAE461cA67B15dc8dc81CE7615e0320dA1A9aB8D5')
+      expect(Pair.getAddress(cUSD, CGLD)).toEqual('0xcB5E5C975D52ae408ea68eB84a74C229E2825e11')
     })
   })
 
@@ -82,7 +82,7 @@ describe('Pair', () => {
     })
 
     it('throws if invalid token', () => {
-      expect(() => pair.priceOf(_CGLD[ChainId.MAINNET])).toThrow('TOKEN')
+      expect(() => pair.priceOf(_CGLD[ChainId.ALFAJORES])).toThrow('TOKEN')
     })
   })
 
@@ -98,7 +98,7 @@ describe('Pair', () => {
 
     it('throws if not in the pair', () => {
       expect(() =>
-        new Pair(new TokenAmount(CGLD, '101'), new TokenAmount(cUSD, '100')).reserveOf(_CGLD[ChainId.MAINNET])
+        new Pair(new TokenAmount(CGLD, '101'), new TokenAmount(cUSD, '100')).reserveOf(_CGLD[ChainId.ALFAJORES])
       ).toThrow('TOKEN')
     })
   })
@@ -113,7 +113,7 @@ describe('Pair', () => {
     expect(new Pair(new TokenAmount(cUSD, '100'), new TokenAmount(CGLD, '100')).involvesToken(cUSD)).toEqual(true)
     expect(new Pair(new TokenAmount(cUSD, '100'), new TokenAmount(CGLD, '100')).involvesToken(CGLD)).toEqual(true)
     expect(
-      new Pair(new TokenAmount(cUSD, '100'), new TokenAmount(CGLD, '100')).involvesToken(_CGLD[ChainId.MAINNET])
+      new Pair(new TokenAmount(cUSD, '100'), new TokenAmount(CGLD, '100')).involvesToken(_CGLD[ChainId.ALFAJORES])
     ).toEqual(false)
   })
 })

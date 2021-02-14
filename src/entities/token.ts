@@ -57,11 +57,11 @@ export function currencyEquals(currencyA: Currency, currencyB: Currency): boolea
 }
 
 export const CGLD = {
-  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x471EcE3750Da237f93B8E339c536989b8978a438', 18, 'CELO', 'Celo'),
+  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x471ece3750da237f93b8e339c536989b8978a438', 18, 'CELO', 'Celo'),
   [ChainId.ALFAJORES]: new Token(ChainId.ALFAJORES, '0xf194afdf50b03e69bd7d057c1aa9e10c9954e4c9', 18, 'CELO', 'Celo')
 }
 
 export const cUSD = {
-  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x765DE816845861e75A25fCA122bb6898B8B1282a', 18, 'CELO', 'Celo'),
+  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x765de816845861e75a25fca122bb6898b8b1282a', 18, 'CELO', 'Celo'),
   [ChainId.ALFAJORES]: new Token(ChainId.ALFAJORES, '0x874069fa1eb16d44d622f2e0ca25eea172369bc1', 18, 'CELO', 'Celo')
 }
