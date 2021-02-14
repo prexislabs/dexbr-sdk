@@ -1,7 +1,7 @@
 import JSBI from 'jsbi'
 import {
   ChainId,
-  ETHER,
+  CGLD_CURRENCY,
   CurrencyAmount,
   Pair,
   Percent,
@@ -10,7 +10,7 @@ import {
   TokenAmount,
   Trade,
   TradeType,
-  WETH
+  CGLD
 } from '../src'
 
 describe('Trade', () => {
@@ -26,48 +26,48 @@ describe('Trade', () => {
   const pair_1_3 = new Pair(new TokenAmount(token1, JSBI.BigInt(1200)), new TokenAmount(token3, JSBI.BigInt(1300)))
 
   const pair_weth_0 = new Pair(
-    new TokenAmount(WETH[ChainId.MAINNET], JSBI.BigInt(1000)),
+    new TokenAmount(CGLD[ChainId.MAINNET], JSBI.BigInt(1000)),
     new TokenAmount(token0, JSBI.BigInt(1000))
   )
 
   const empty_pair_0_1 = new Pair(new TokenAmount(token0, JSBI.BigInt(0)), new TokenAmount(token1, JSBI.BigInt(0)))
 
-  it('can be constructed with ETHER as input', () => {
+  it('can be constructed with CGLD_CURRENCY as input', () => {
     const trade = new Trade(
-      new Route([pair_weth_0], ETHER),
-      CurrencyAmount.ether(JSBI.BigInt(100)),
+      new Route([pair_weth_0], CGLD_CURRENCY),
+      CurrencyAmount.cgld(JSBI.BigInt(100)),
       TradeType.EXACT_INPUT
     )
-    expect(trade.inputAmount.currency).toEqual(ETHER)
+    expect(trade.inputAmount.currency).toEqual(CGLD_CURRENCY)
     expect(trade.outputAmount.currency).toEqual(token0)
   })
-  it('can be constructed with ETHER as input for exact output', () => {
+  it('can be constructed with CGLD_CURRENCY as input for exact output', () => {
     const trade = new Trade(
-      new Route([pair_weth_0], ETHER, token0),
+      new Route([pair_weth_0], CGLD_CURRENCY, token0),
       new TokenAmount(token0, JSBI.BigInt(100)),
       TradeType.EXACT_OUTPUT
     )
-    expect(trade.inputAmount.currency).toEqual(ETHER)
+    expect(trade.inputAmount.currency).toEqual(CGLD_CURRENCY)
     expect(trade.outputAmount.currency).toEqual(token0)
   })
 
-  it('can be constructed with ETHER as output', () => {
+  it('can be constructed with CGLD_CURRENCY as output', () => {
     const trade = new Trade(
-      new Route([pair_weth_0], token0, ETHER),
-      CurrencyAmount.ether(JSBI.BigInt(100)),
+      new Route([pair_weth_0], token0, CGLD_CURRENCY),
+      CurrencyAmount.cgld(JSBI.BigInt(100)),
       TradeType.EXACT_OUTPUT
     )
     expect(trade.inputAmount.currency).toEqual(token0)
-    expect(trade.outputAmount.currency).toEqual(ETHER)
+    expect(trade.outputAmount.currency).toEqual(CGLD_CURRENCY)
   })
-  it('can be constructed with ETHER as output for exact input', () => {
+  it('can be constructed with CGLD_CURRENCY as output for exact input', () => {
     const trade = new Trade(
-      new Route([pair_weth_0], token0, ETHER),
+      new Route([pair_weth_0], token0, CGLD_CURRENCY),
       new TokenAmount(token0, JSBI.BigInt(100)),
       TradeType.EXACT_INPUT
     )
     expect(trade.inputAmount.currency).toEqual(token0)
-    expect(trade.outputAmount.currency).toEqual(ETHER)
+    expect(trade.outputAmount.currency).toEqual(CGLD_CURRENCY)
   })
 
   describe('#bestTradeExactIn', () => {
@@ -147,33 +147,33 @@ describe('Trade', () => {
       expect(result).toHaveLength(0)
     })
 
-    it('works for ETHER currency input', () => {
+    it('works for CGLD_CURRENCY currency input', () => {
       const result = Trade.bestTradeExactIn(
         [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
-        CurrencyAmount.ether(JSBI.BigInt(100)),
+        CurrencyAmount.cgld(JSBI.BigInt(100)),
         token3
       )
       expect(result).toHaveLength(2)
-      expect(result[0].inputAmount.currency).toEqual(ETHER)
-      expect(result[0].route.path).toEqual([WETH[ChainId.MAINNET], token0, token1, token3])
+      expect(result[0].inputAmount.currency).toEqual(CGLD_CURRENCY)
+      expect(result[0].route.path).toEqual([CGLD[ChainId.MAINNET], token0, token1, token3])
       expect(result[0].outputAmount.currency).toEqual(token3)
-      expect(result[1].inputAmount.currency).toEqual(ETHER)
-      expect(result[1].route.path).toEqual([WETH[ChainId.MAINNET], token0, token3])
+      expect(result[1].inputAmount.currency).toEqual(CGLD_CURRENCY)
+      expect(result[1].route.path).toEqual([CGLD[ChainId.MAINNET], token0, token3])
       expect(result[1].outputAmount.currency).toEqual(token3)
     })
-    it('works for ETHER currency output', () => {
+    it('works for CGLD_CURRENCY currency output', () => {
       const result = Trade.bestTradeExactIn(
         [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
         new TokenAmount(token3, JSBI.BigInt(100)),
-        ETHER
+        CGLD_CURRENCY
       )
       expect(result).toHaveLength(2)
       expect(result[0].inputAmount.currency).toEqual(token3)
-      expect(result[0].route.path).toEqual([token3, token0, WETH[ChainId.MAINNET]])
-      expect(result[0].outputAmount.currency).toEqual(ETHER)
+      expect(result[0].route.path).toEqual([token3, token0, CGLD[ChainId.MAINNET]])
+      expect(result[0].outputAmount.currency).toEqual(CGLD_CURRENCY)
       expect(result[1].inputAmount.currency).toEqual(token3)
-      expect(result[1].route.path).toEqual([token3, token1, token0, WETH[ChainId.MAINNET]])
-      expect(result[1].outputAmount.currency).toEqual(ETHER)
+      expect(result[1].route.path).toEqual([token3, token1, token0, CGLD[ChainId.MAINNET]])
+      expect(result[1].outputAmount.currency).toEqual(CGLD_CURRENCY)
     })
   })
 
@@ -372,33 +372,33 @@ describe('Trade', () => {
       expect(result).toHaveLength(0)
     })
 
-    it('works for ETHER currency input', () => {
+    it('works for CGLD_CURRENCY currency input', () => {
       const result = Trade.bestTradeExactOut(
         [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
-        ETHER,
+        CGLD_CURRENCY,
         new TokenAmount(token3, JSBI.BigInt(100))
       )
       expect(result).toHaveLength(2)
-      expect(result[0].inputAmount.currency).toEqual(ETHER)
-      expect(result[0].route.path).toEqual([WETH[ChainId.MAINNET], token0, token1, token3])
+      expect(result[0].inputAmount.currency).toEqual(CGLD_CURRENCY)
+      expect(result[0].route.path).toEqual([CGLD[ChainId.MAINNET], token0, token1, token3])
       expect(result[0].outputAmount.currency).toEqual(token3)
-      expect(result[1].inputAmount.currency).toEqual(ETHER)
-      expect(result[1].route.path).toEqual([WETH[ChainId.MAINNET], token0, token3])
+      expect(result[1].inputAmount.currency).toEqual(CGLD_CURRENCY)
+      expect(result[1].route.path).toEqual([CGLD[ChainId.MAINNET], token0, token3])
       expect(result[1].outputAmount.currency).toEqual(token3)
     })
-    it('works for ETHER currency output', () => {
+    it('works for CGLD_CURRENCY currency output', () => {
       const result = Trade.bestTradeExactOut(
         [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
         token3,
-        CurrencyAmount.ether(JSBI.BigInt(100))
+        CurrencyAmount.cgld(JSBI.BigInt(100))
       )
       expect(result).toHaveLength(2)
       expect(result[0].inputAmount.currency).toEqual(token3)
-      expect(result[0].route.path).toEqual([token3, token0, WETH[ChainId.MAINNET]])
-      expect(result[0].outputAmount.currency).toEqual(ETHER)
+      expect(result[0].route.path).toEqual([token3, token0, CGLD[ChainId.MAINNET]])
+      expect(result[0].outputAmount.currency).toEqual(CGLD_CURRENCY)
       expect(result[1].inputAmount.currency).toEqual(token3)
-      expect(result[1].route.path).toEqual([token3, token1, token0, WETH[ChainId.MAINNET]])
-      expect(result[1].outputAmount.currency).toEqual(ETHER)
+      expect(result[1].route.path).toEqual([token3, token1, token0, CGLD[ChainId.MAINNET]])
+      expect(result[1].outputAmount.currency).toEqual(CGLD_CURRENCY)
     })
   })
 })

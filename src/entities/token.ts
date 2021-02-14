@@ -56,28 +56,12 @@ export function currencyEquals(currencyA: Currency, currencyB: Currency): boolea
   }
 }
 
-export const WETH = {
-  [ChainId.MAINNET]: new Token(
-    ChainId.MAINNET,
-    '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    18,
-    'WETH',
-    'Wrapped Ether'
-  ),
-  [ChainId.ROPSTEN]: new Token(
-    ChainId.ROPSTEN,
-    '0xc778417E063141139Fce010982780140Aa0cD5Ab',
-    18,
-    'WETH',
-    'Wrapped Ether'
-  ),
-  [ChainId.RINKEBY]: new Token(
-    ChainId.RINKEBY,
-    '0xc778417E063141139Fce010982780140Aa0cD5Ab',
-    18,
-    'WETH',
-    'Wrapped Ether'
-  ),
-  [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6', 18, 'WETH', 'Wrapped Ether'),
-  [ChainId.KOVAN]: new Token(ChainId.KOVAN, '0xd0A1E359811322d97991E03f863a0C30C2cF029C', 18, 'WETH', 'Wrapped Ether')
+export const CGLD = {
+  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x471EcE3750Da237f93B8E339c536989b8978a438', 18, 'CELO', 'Celo'),
+  [ChainId.ALFAJORES]: new Token(ChainId.ALFAJORES, '0xf194afdf50b03e69bd7d057c1aa9e10c9954e4c9', 18, 'CELO', 'Celo')
+}
+
+export const cUSD = {
+  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x765DE816845861e75A25fCA122bb6898B8B1282a', 18, 'CELO', 'Celo'),
+  [ChainId.ALFAJORES]: new Token(ChainId.ALFAJORES, '0x874069fa1eb16d44d622f2e0ca25eea172369bc1', 18, 'CELO', 'Celo')
 }
