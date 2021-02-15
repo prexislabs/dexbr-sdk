@@ -1,17 +1,17 @@
 import JSBI from 'jsbi'
-export { JSBI }
-
 export {
   BigintIsh,
   ChainId,
-  TradeType,
-  Rounding,
+  CHAIN_INFO,
   FACTORY_ADDRESS,
   INIT_CODE_HASH,
-  MINIMUM_LIQUIDITY
+  MINIMUM_LIQUIDITY,
+  Rounding,
+  TradeType
 } from './constants'
-
-export * from './errors'
 export * from './entities'
-export * from './router'
+export * from './errors'
 export * from './fetcher'
+export * from './router'
+export { getBlockscoutLink, parseNetwork } from './utils'
+export { JSBI }
