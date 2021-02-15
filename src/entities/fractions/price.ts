@@ -1,18 +1,14 @@
-import { Token } from '../token'
-import { TokenAmount } from './tokenAmount'
-import { currencyEquals } from '../token'
-import invariant from 'tiny-invariant'
 import JSBI from 'jsbi'
-
+import invariant from 'tiny-invariant'
 import { BigintIsh, Rounding, TEN } from '../../constants'
-import { Currency } from '../currency'
 import { Route } from '../route'
+import { currencyEquals, Token } from '../token'
 import { Fraction } from './fraction'
-import { CurrencyAmount } from './currencyAmount'
+import { TokenAmount } from './tokenAmount'
 
 export class Price extends Fraction {
-  public readonly baseCurrency: Currency // input i.e. denominator
-  public readonly quoteCurrency: Currency // output i.e. numerator
+  public readonly baseCurrency: Token // input i.e. denominator
+  public readonly quoteCurrency: Token // output i.e. numerator
   public readonly scalar: Fraction // used to adjust the raw fraction w/r/t the decimals of the {base,quote}Token
 
   public static fromRoute(route: Route): Price {
@@ -28,7 +24,7 @@ export class Price extends Fraction {
   }
 
   // denominator and numerator _must_ be raw, i.e. in the native representation
-  public constructor(baseCurrency: Currency, quoteCurrency: Currency, denominator: BigintIsh, numerator: BigintIsh) {
+  public constructor(baseCurrency: Token, quoteCurrency: Token, denominator: BigintIsh, numerator: BigintIsh) {
     super(numerator, denominator)
 
     this.baseCurrency = baseCurrency
@@ -58,12 +54,9 @@ export class Price extends Fraction {
   }
 
   // performs floor division on overflow
-  public quote(currencyAmount: CurrencyAmount): CurrencyAmount {
+  public quote(currencyAmount: TokenAmount): TokenAmount {
     invariant(currencyEquals(currencyAmount.currency, this.baseCurrency), 'TOKEN')
-    if (this.quoteCurrency instanceof Token) {
-      return new TokenAmount(this.quoteCurrency, super.multiply(currencyAmount.raw).quotient)
-    }
-    return CurrencyAmount.cgld(super.multiply(currencyAmount.raw).quotient)
+    return new TokenAmount(this.quoteCurrency, super.multiply(currencyAmount.raw).quotient)
   }
 
   public toSignificant(significantDigits: number = 6, format?: object, rounding?: Rounding): string {

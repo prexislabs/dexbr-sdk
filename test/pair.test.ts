@@ -1,4 +1,4 @@
-import { ChainId, Token, Pair, TokenAmount, CGLD as _CGLD, cUSD as _cUSD, Price } from '../src'
+import { CELO as _CGLD, ChainId, cUSD as _cUSD, Pair, Price, Token, TokenAmount } from '../src'
 
 describe('Pair', () => {
   const cUSD = new Token(ChainId.MAINNET, _cUSD[ChainId.MAINNET].address, 18, 'cUSD', 'Celo USD')

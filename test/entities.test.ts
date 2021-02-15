@@ -1,5 +1,5 @@
 import invariant from 'tiny-invariant'
-import { ChainId, CGLD as _CGLD, TradeType, Rounding, Token, TokenAmount, Pair, Route, Trade } from '../src'
+import { CELO as _CGLD, ChainId, Pair, Rounding, Route, Token, TokenAmount, Trade, TradeType } from '../src'
 
 const ADDRESSES = [
   '0x0000000000000000000000000000000000000001',

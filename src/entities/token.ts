@@ -1,17 +1,31 @@
 import invariant from 'tiny-invariant'
-import { ChainId } from '../constants'
-import { validateAndParseAddress } from '../utils'
-import { Currency } from './currency'
+import { JSBI } from '..'
+import { ChainId, SolidityType } from '../constants'
+import { validateAndParseAddress, validateSolidityTypeInstance } from '../utils'
 
 /**
  * Represents an ERC20 token with a unique address and some metadata.
  */
-export class Token extends Currency {
+export class Token {
+  public readonly decimals: number
+  public readonly symbol?: string
+  public readonly name?: string
+
   public readonly chainId: ChainId
   public readonly address: string
 
+  /**
+   * Constructs an instance of the base class `Currency`.
+   * @param decimals decimals of the currency
+   * @param symbol symbol of the currency
+   * @param name of the currency
+   */
   public constructor(chainId: ChainId, address: string, decimals: number, symbol?: string, name?: string) {
-    super(decimals, symbol, name)
+    validateSolidityTypeInstance(JSBI.BigInt(decimals), SolidityType.uint8)
+    this.decimals = decimals
+    this.symbol = symbol
+    this.name = name
+
     this.chainId = chainId
     this.address = validateAndParseAddress(address)
   }
@@ -44,24 +58,36 @@ export class Token extends Currency {
 /**
  * Compares two currencies for equality
  */
-export function currencyEquals(currencyA: Currency, currencyB: Currency): boolean {
-  if (currencyA instanceof Token && currencyB instanceof Token) {
-    return currencyA.equals(currencyB)
-  } else if (currencyA instanceof Token) {
-    return false
-  } else if (currencyB instanceof Token) {
-    return false
-  } else {
-    return currencyA === currencyB
-  }
+export function currencyEquals(currencyA: Token, currencyB: Token): boolean {
+  return currencyA.equals(currencyB)
 }
 
-export const CGLD = {
-  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x471ece3750da237f93b8e339c536989b8978a438', 18, 'CELO', 'Celo'),
-  [ChainId.ALFAJORES]: new Token(ChainId.ALFAJORES, '0xf194afdf50b03e69bd7d057c1aa9e10c9954e4c9', 18, 'CELO', 'Celo')
+export const CELO = {
+  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x471EcE3750Da237f93B8E339c536989b8978a438', 18, 'CELO', 'Celo'),
+  [ChainId.ALFAJORES]: new Token(ChainId.ALFAJORES, '0xf194afdf50b03e69bd7d057c1aa9e10c9954e4c9', 18, 'CELO', 'Celo'),
+  [ChainId.BAKLAVA]: new Token(ChainId.BAKLAVA, '0x765DE816845861e75A25fCA122bb6898B8B1282a', 18, 'CELO', 'Celo')
 }
 
 export const cUSD = {
-  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x765de816845861e75a25fca122bb6898b8b1282a', 18, 'CELO', 'Celo'),
-  [ChainId.ALFAJORES]: new Token(ChainId.ALFAJORES, '0x874069fa1eb16d44d622f2e0ca25eea172369bc1', 18, 'CELO', 'Celo')
+  [ChainId.MAINNET]: new Token(
+    ChainId.MAINNET,
+    '0x765DE816845861e75A25fCA122bb6898B8B1282a',
+    18,
+    'cUSD',
+    'Celo Dollar'
+  ),
+  [ChainId.ALFAJORES]: new Token(
+    ChainId.ALFAJORES,
+    '0x874069fa1eb16d44d622f2e0ca25eea172369bc1',
+    18,
+    'cUSD',
+    'Celo Dollar'
+  ),
+  [ChainId.BAKLAVA]: new Token(
+    ChainId.ALFAJORES,
+    '0x765DE816845861e75A25fCA122bb6898B8B1282a',
+    18,
+    'cUSD',
+    'Celo Dollar'
+  )
 }

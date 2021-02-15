@@ -1,7 +1,7 @@
-import { TradeType } from './constants'
 import invariant from 'tiny-invariant'
+import { TradeType } from './constants'
+import { Percent, TokenAmount, Trade } from './entities'
 import { validateAndParseAddress } from './utils'
-import { CurrencyAmount, CGLD_CURRENCY, Percent, Trade } from './entities'
 
 /**
  * Options for producing the arguments to send call to the router.
@@ -54,7 +54,7 @@ export interface SwapParameters {
   value: string
 }
 
-function toHex(currencyAmount: CurrencyAmount) {
+function toHex(currencyAmount: TokenAmount) {
   return `0x${currencyAmount.raw.toString(16)}`
 }
 
@@ -74,10 +74,7 @@ export abstract class Router {
    * @param options options for the call parameters
    */
   public static swapCallParameters(trade: Trade, options: TradeOptions | TradeOptionsDeadline): SwapParameters {
-    const cgldIn = trade.inputAmount.currency === CGLD_CURRENCY
-    const cgldOut = trade.outputAmount.currency === CGLD_CURRENCY
     // the router does not support both cgld in and out
-    invariant(!(cgldIn && cgldOut), 'CGLD_CURRENCY_IN_OUT')
     invariant(!('ttl' in options) || options.ttl > 0, 'TTL')
 
     const to: string = validateAndParseAddress(options.recipient)
@@ -96,43 +93,19 @@ export abstract class Router {
     let value: string
     switch (trade.tradeType) {
       case TradeType.EXACT_INPUT:
-        if (cgldIn) {
-          methodName = useFeeOnTransfer ? 'swapExactETHForTokensSupportingFeeOnTransferTokens' : 'swapExactETHForTokens'
-          // (uint amountOutMin, address[] calldata path, address to, uint deadline)
-          args = [amountOut, path, to, deadline]
-          value = amountIn
-        } else if (cgldOut) {
-          methodName = useFeeOnTransfer ? 'swapExactTokensForETHSupportingFeeOnTransferTokens' : 'swapExactTokensForETH'
-          // (uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
-          args = [amountIn, amountOut, path, to, deadline]
-          value = ZERO_HEX
-        } else {
-          methodName = useFeeOnTransfer
-            ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
-            : 'swapExactTokensForTokens'
-          // (uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
-          args = [amountIn, amountOut, path, to, deadline]
-          value = ZERO_HEX
-        }
+        methodName = useFeeOnTransfer
+          ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
+          : 'swapExactTokensForTokens'
+        // (uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
+        args = [amountIn, amountOut, path, to, deadline]
+        value = ZERO_HEX
         break
       case TradeType.EXACT_OUTPUT:
         invariant(!useFeeOnTransfer, 'EXACT_OUT_FOT')
-        if (cgldIn) {
-          methodName = 'swapETHForExactTokens'
-          // (uint amountOut, address[] calldata path, address to, uint deadline)
-          args = [amountOut, path, to, deadline]
-          value = amountIn
-        } else if (cgldOut) {
-          methodName = 'swapTokensForExactETH'
-          // (uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
-          args = [amountOut, amountIn, path, to, deadline]
-          value = ZERO_HEX
-        } else {
-          methodName = 'swapTokensForExactTokens'
-          // (uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
-          args = [amountOut, amountIn, path, to, deadline]
-          value = ZERO_HEX
-        }
+        methodName = 'swapTokensForExactTokens'
+        // (uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
+        args = [amountOut, amountIn, path, to, deadline]
+        value = ZERO_HEX
         break
     }
     return {

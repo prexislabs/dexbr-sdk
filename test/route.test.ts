@@ -1,9 +1,11 @@
-import { Token, CGLD, ChainId, Pair, TokenAmount, Route, CGLD_CURRENCY } from '../src'
+import { CELO, ChainId, Pair, Route, Token, TokenAmount } from '../src'
+
+const CELO_CURRENCY = CELO[ChainId.MAINNET]
 
 describe('Route', () => {
   const token0 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000001', 18, 't0')
   const token1 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000002', 18, 't1')
-  const weth = CGLD[ChainId.MAINNET]
+  const weth = CELO[ChainId.MAINNET]
   const pair_0_1 = new Pair(new TokenAmount(token0, '100'), new TokenAmount(token1, '200'))
   const pair_0_weth = new Pair(new TokenAmount(token0, '100'), new TokenAmount(weth, '100'))
   const pair_1_weth = new Pair(new TokenAmount(token1, '175'), new TokenAmount(weth, '100'))
@@ -25,16 +27,16 @@ describe('Route', () => {
   })
 
   it('supports cgld input', () => {
-    const route = new Route([pair_0_weth], CGLD_CURRENCY)
+    const route = new Route([pair_0_weth], CELO_CURRENCY)
     expect(route.pairs).toEqual([pair_0_weth])
-    expect(route.input).toEqual(CGLD_CURRENCY)
+    expect(route.input).toEqual(CELO_CURRENCY)
     expect(route.output).toEqual(token0)
   })
 
   it('supports cgld output', () => {
-    const route = new Route([pair_0_weth], token0, CGLD_CURRENCY)
+    const route = new Route([pair_0_weth], token0, CELO_CURRENCY)
     expect(route.pairs).toEqual([pair_0_weth])
     expect(route.input).toEqual(token0)
-    expect(route.output).toEqual(CGLD_CURRENCY)
+    expect(route.output).toEqual(CELO_CURRENCY)
   })
 })
