@@ -46,3 +46,27 @@ export const SOLIDITY_TYPE_MAXIMA = {
   [SolidityType.uint8]: JSBI.BigInt('0xff'),
   [SolidityType.uint256]: JSBI.BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 }
+
+interface ChainInfo {
+  name: string
+  fornoURL: string
+  blockscoutURL: string
+}
+
+export const CHAIN_INFO: { [K in ChainId]: ChainInfo } = {
+  [ChainId.ALFAJORES]: {
+    name: 'Alfajores',
+    fornoURL: 'https://alfajores-forno.celo-testnet.org',
+    blockscoutURL: 'https://alfajores-blockscout.celo-testnet.org'
+  },
+  [ChainId.BAKLAVA]: {
+    name: 'Baklava',
+    fornoURL: 'https://baklava-forno.celo-testnet.org',
+    blockscoutURL: 'https://baklava-blockscout.celo-testnet.org'
+  },
+  [ChainId.MAINNET]: {
+    name: 'Mainnet',
+    fornoURL: 'https://forno.celo.org',
+    blockscoutURL: 'https://explorer.celo.org'
+  }
+}
