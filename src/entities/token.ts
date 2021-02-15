@@ -1,5 +1,5 @@
+import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
-import { JSBI } from '..'
 import { ChainId, SolidityType } from '../constants'
 import { validateAndParseAddress, validateSolidityTypeInstance } from '../utils'
 
