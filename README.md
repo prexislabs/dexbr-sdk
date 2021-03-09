@@ -54,3 +54,10 @@ Time:        5.091s
 Ran all test suites.
 ✨  Done in 6.61s.
 ```
+
+## Deploying to NPM
+
+```sh
+yarn build
+yarn publish
+```
