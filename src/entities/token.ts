@@ -64,7 +64,7 @@ export function currencyEquals(currencyA: Token, currencyB: Token): boolean {
 
 export const CELO = {
   [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x471EcE3750Da237f93B8E339c536989b8978a438', 18, 'CELO', 'Celo'),
-  [ChainId.ALFAJORES]: new Token(ChainId.ALFAJORES, '0xf194afdf50b03e69bd7d057c1aa9e10c9954e4c9', 18, 'CELO', 'Celo'),
+  [ChainId.ALFAJORES]: new Token(ChainId.ALFAJORES, '0xF194afDf50B03e69Bd7D057c1Aa9e10c9954E4C9', 18, 'CELO', 'Celo'),
   [ChainId.BAKLAVA]: new Token(ChainId.BAKLAVA, '0x765DE816845861e75A25fCA122bb6898B8B1282a', 18, 'CELO', 'Celo')
 }
 
@@ -78,7 +78,7 @@ export const cUSD = {
   ),
   [ChainId.ALFAJORES]: new Token(
     ChainId.ALFAJORES,
-    '0x874069fa1eb16d44d622f2e0ca25eea172369bc1',
+    '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
     18,
     'cUSD',
     'Celo Dollar'
