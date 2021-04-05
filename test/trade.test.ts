@@ -25,7 +25,7 @@ describe('Trade', () => {
   it('can be constructed with CELO_CURRENCY as input', () => {
     const trade = new Trade(
       new Route([pair_weth_0], CELO_CURRENCY),
-      TokenAmount.celo(JSBI.BigInt(100)),
+      new TokenAmount(CELO_CURRENCY, JSBI.BigInt(100)),
       TradeType.EXACT_INPUT
     )
     expect(trade.inputAmount.currency).toEqual(CELO_CURRENCY)
@@ -44,7 +44,7 @@ describe('Trade', () => {
   it('can be constructed with CELO_CURRENCY as output', () => {
     const trade = new Trade(
       new Route([pair_weth_0], token0, CELO_CURRENCY),
-      TokenAmount.celo(JSBI.BigInt(100)),
+      new TokenAmount(CELO_CURRENCY, JSBI.BigInt(100)),
       TradeType.EXACT_OUTPUT
     )
     expect(trade.inputAmount.currency).toEqual(token0)
@@ -140,7 +140,7 @@ describe('Trade', () => {
     it('works for CELO_CURRENCY currency input', () => {
       const result = Trade.bestTradeExactIn(
         [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
-        TokenAmount.celo(JSBI.BigInt(100)),
+        new TokenAmount(CELO_CURRENCY, JSBI.BigInt(100)),
         token3
       )
       expect(result).toHaveLength(2)
@@ -380,7 +380,7 @@ describe('Trade', () => {
       const result = Trade.bestTradeExactOut(
         [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
         token3,
-        TokenAmount.celo(JSBI.BigInt(100))
+        new TokenAmount(CELO_CURRENCY, JSBI.BigInt(100))
       )
       expect(result).toHaveLength(2)
       expect(result[0].inputAmount.currency).toEqual(token3)

@@ -21,9 +21,12 @@ describe('Router', () => {
 
   describe('#swapCallParameters', () => {
     describe('exact in', () => {
-      it('cgld to token1', () => {
+      it('celo to token1', () => {
         const result = Router.swapCallParameters(
-          Trade.exactIn(new Route([pair_weth_0, pair_0_1], CELO_CURRENCY, token1), TokenAmount.celo(JSBI.BigInt(100))),
+          Trade.exactIn(
+            new Route([pair_weth_0, pair_0_1], CELO_CURRENCY, token1),
+            new TokenAmount(CELO_CURRENCY, JSBI.BigInt(100))
+          ),
           { ttl: 50, recipient: '0x0000000000000000000000000000000000000004', allowedSlippage: new Percent('1', '100') }
         )
         expect(result.methodName).toEqual('swapExactTokensForTokens')
@@ -39,7 +42,10 @@ describe('Router', () => {
 
       it('deadline specified', () => {
         const result = Router.swapCallParameters(
-          Trade.exactIn(new Route([pair_weth_0, pair_0_1], CELO_CURRENCY, token1), TokenAmount.celo(JSBI.BigInt(100))),
+          Trade.exactIn(
+            new Route([pair_weth_0, pair_0_1], CELO_CURRENCY, token1),
+            new TokenAmount(CELO_CURRENCY, JSBI.BigInt(100))
+          ),
           {
             deadline: 50,
             recipient: '0x0000000000000000000000000000000000000004',
@@ -57,7 +63,7 @@ describe('Router', () => {
         expect(result.value).toEqual('0x0')
       })
 
-      it('token1 to cgld', () => {
+      it('token1 to celo', () => {
         const result = Router.swapCallParameters(
           Trade.exactIn(
             new Route([pair_0_1, pair_weth_0], token1, CELO_CURRENCY),
@@ -92,7 +98,7 @@ describe('Router', () => {
       })
     })
     describe('exact out', () => {
-      it('cgld to token1', () => {
+      it('celo to token1', () => {
         const result = Router.swapCallParameters(
           Trade.exactOut(
             new Route([pair_weth_0, pair_0_1], CELO_CURRENCY, token1),
@@ -110,9 +116,12 @@ describe('Router', () => {
         expect(result.value).toEqual('0x0')
         checkDeadline(result.args[result.args.length - 1])
       })
-      it('token1 to cgld', () => {
+      it('token1 to celo', () => {
         const result = Router.swapCallParameters(
-          Trade.exactOut(new Route([pair_0_1, pair_weth_0], token1, CELO_CURRENCY), TokenAmount.celo(JSBI.BigInt(100))),
+          Trade.exactOut(
+            new Route([pair_0_1, pair_weth_0], token1, CELO_CURRENCY),
+            new TokenAmount(CELO_CURRENCY, JSBI.BigInt(100))
+          ),
           { ttl: 50, recipient: '0x0000000000000000000000000000000000000004', allowedSlippage: new Percent('1', '100') }
         )
         expect(result.methodName).toEqual('swapTokensForExactTokens')
@@ -143,11 +152,11 @@ describe('Router', () => {
     })
     describe('supporting fee on transfer', () => {
       describe('exact in', () => {
-        it('cgld to token1', () => {
+        it('celo to token1', () => {
           const result = Router.swapCallParameters(
             Trade.exactIn(
               new Route([pair_weth_0, pair_0_1], CELO_CURRENCY, token1),
-              TokenAmount.celo(JSBI.BigInt(100))
+              new TokenAmount(CELO_CURRENCY, JSBI.BigInt(100))
             ),
             {
               ttl: 50,
@@ -166,7 +175,7 @@ describe('Router', () => {
           expect(result.value).toEqual('0x0')
           checkDeadline(result.args[result.args.length - 1])
         })
-        it('token1 to cgld', () => {
+        it('token1 to celo', () => {
           const result = Router.swapCallParameters(
             Trade.exactIn(
               new Route([pair_0_1, pair_weth_0], token1, CELO_CURRENCY),
@@ -211,7 +220,7 @@ describe('Router', () => {
         })
       })
       describe('exact out', () => {
-        it('cgld to token1', () => {
+        it('celo to token1', () => {
           expect(() =>
             Router.swapCallParameters(
               Trade.exactOut(
@@ -227,12 +236,12 @@ describe('Router', () => {
             )
           ).toThrow('EXACT_OUT_FOT')
         })
-        it('token1 to cgld', () => {
+        it('token1 to celo', () => {
           expect(() =>
             Router.swapCallParameters(
               Trade.exactOut(
                 new Route([pair_0_1, pair_weth_0], token1, CELO_CURRENCY),
-                TokenAmount.celo(JSBI.BigInt(100))
+                new TokenAmount(CELO_CURRENCY, JSBI.BigInt(100))
               ),
               {
                 ttl: 50,

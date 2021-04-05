@@ -2,9 +2,9 @@ import _Big from 'big.js'
 import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
 import toFormat from 'toformat'
-import { BigintIsh, ChainId, Rounding, SolidityType, TEN } from '../../constants'
+import { BigintIsh, Rounding, SolidityType, TEN } from '../../constants'
 import { parseBigintIsh, validateSolidityTypeInstance } from '../../utils'
-import { CELO, Token } from '../token'
+import { Token } from '../token'
 import { Fraction } from './fraction'
 
 const Big = toFormat(_Big)
@@ -65,13 +65,5 @@ export class TokenAmount extends CurrencyAmount {
   public subtract(other: TokenAmount): TokenAmount {
     invariant(this.token.equals(other.token), 'TOKEN')
     return new TokenAmount(this.token, JSBI.subtract(this.raw, other.raw))
-  }
-
-  /**
-   * Helper that calls the constructor with the CELO_CURRENCY currency
-   * @param amount celo amount in wei
-   */
-  public static celo(amount: BigintIsh): TokenAmount {
-    return new TokenAmount(CELO[ChainId.MAINNET], amount)
   }
 }
