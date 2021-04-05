@@ -13,9 +13,8 @@ describe('Pair', () => {
   })
 
   describe('#getAddress', () => {
-    // TODO: Fix this test once the pair has been created on mainnet
     it('returns the correct address', () => {
-      expect(Pair.getAddress(cUSD, CGLD)).toEqual('0xcB5E5C975D52ae408ea68eB84a74C229E2825e11')
+      expect(Pair.getAddress(cUSD, CGLD)).toEqual('0x1E593F1FE7B61c53874B54EC0c59FD0d5eb8621e')
     })
   })
 
