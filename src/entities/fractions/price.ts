@@ -1,9 +1,9 @@
+import { Fraction } from '@ubeswap/token-math'
 import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
 import { BigintIsh, Rounding, TEN } from '../../constants'
 import { Route } from '../route'
 import { currencyEquals, Token } from '../token'
-import { Fraction } from './fraction'
 import { TokenAmount } from './tokenAmount'
 
 export class Price extends Fraction {
