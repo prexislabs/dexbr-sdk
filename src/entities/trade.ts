@@ -31,8 +31,8 @@ interface InputOutput {
 // in increasing order. i.e. the best trades have the most outputs for the least inputs and are sorted first
 export function inputOutputComparator(a: InputOutput, b: InputOutput): number {
   // must have same input and output token for comparison
-  invariant(currencyEquals(a.inputAmount.currency, b.inputAmount.currency), 'INPUT_CURRENCY')
-  invariant(currencyEquals(a.outputAmount.currency, b.outputAmount.currency), 'OUTPUT_CURRENCY')
+  invariant(currencyEquals(a.inputAmount.token, b.inputAmount.token), 'INPUT_CURRENCY')
+  invariant(currencyEquals(a.outputAmount.token, b.outputAmount.token), 'OUTPUT_CURRENCY')
   if (a.outputAmount.equalTo(b.outputAmount)) {
     if (a.inputAmount.equalTo(b.inputAmount)) {
       return 0
@@ -134,7 +134,7 @@ export class Trade {
     const amounts: TokenAmount[] = new Array(route.path.length)
     const nextPairs: Pair[] = new Array(route.pairs.length)
     if (tradeType === TradeType.EXACT_INPUT) {
-      invariant(currencyEquals(amount.currency, route.input), 'INPUT')
+      invariant(currencyEquals(amount.token, route.input), 'INPUT')
       amounts[0] = amount
       for (let i = 0; i < route.path.length - 1; i++) {
         const pair = route.pairs[i]
@@ -143,7 +143,7 @@ export class Trade {
         nextPairs[i] = nextPair
       }
     } else {
-      invariant(currencyEquals(amount.currency, route.output), 'OUTPUT')
+      invariant(currencyEquals(amount.token, route.output), 'OUTPUT')
       amounts[amounts.length - 1] = amount
       for (let i = route.path.length - 1; i > 0; i--) {
         const pair = route.pairs[i - 1]
@@ -158,8 +158,8 @@ export class Trade {
     this.inputAmount = tradeType === TradeType.EXACT_INPUT ? amount : amounts[0]
     this.outputAmount = tradeType === TradeType.EXACT_OUTPUT ? amount : amounts[amounts.length - 1]
     this.executionPrice = new Price(
-      this.inputAmount.currency,
-      this.outputAmount.currency,
+      this.inputAmount.token,
+      this.outputAmount.token,
       this.inputAmount.raw,
       this.outputAmount.raw
     )
@@ -256,7 +256,7 @@ export class Trade {
         sortedInsert(
           bestTrades,
           new Trade(
-            new Route([...currentPairs, pair], originalAmountIn.currency, currencyOut),
+            new Route([...currentPairs, pair], originalAmountIn.token, currencyOut),
             originalAmountIn,
             TradeType.EXACT_INPUT
           ),
@@ -344,7 +344,7 @@ export class Trade {
         sortedInsert(
           bestTrades,
           new Trade(
-            new Route([pair, ...currentPairs], currencyIn, originalAmountOut.currency),
+            new Route([pair, ...currentPairs], currencyIn, originalAmountOut.token),
             originalAmountOut,
             TradeType.EXACT_OUTPUT
           ),
