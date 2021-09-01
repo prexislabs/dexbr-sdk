@@ -91,3 +91,15 @@ export const cUSD = {
     'Celo Dollar'
   )
 }
+
+export const cEUR = {
+  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73', 18, 'cEUR', 'Celo Euro'),
+  [ChainId.ALFAJORES]: new Token(
+    ChainId.ALFAJORES,
+    '0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F',
+    18,
+    'cEUR',
+    'Celo Euro'
+  ),
+  [ChainId.BAKLAVA]: new Token(ChainId.BAKLAVA, '0xf9ecE301247aD2CE21894941830A2470f4E774ca', 18, 'cEUR', 'Celo Euro')
+}
