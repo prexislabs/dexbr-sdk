@@ -103,3 +103,14 @@ export const cEUR = {
   ),
   [ChainId.BAKLAVA]: new Token(ChainId.BAKLAVA, '0xf9ecE301247aD2CE21894941830A2470f4E774ca', 18, 'cEUR', 'Celo Euro')
 }
+
+export const cREAL = {
+  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0xe8537a3d056DA446677B9E9d6c5dB704EaAb4787', 18, 'cREAL', 'Celo Brazilian REAL'),
+  [ChainId.ALFAJORES]: new Token(
+    ChainId.ALFAJORES,
+    '0xE4D517785D091D3c54818832dB6094bcc2744545',
+    18,
+    'cREAL',
+    'Celo Brazilian REAL'
+  ),
+}
