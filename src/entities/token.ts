@@ -114,3 +114,14 @@ export const cREAL = {
     'Celo Brazilian REAL'
   ),
 }
+
+export const mcUSD = {
+  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x918146359264C492BD6934071c6Bd31C854EDBc3', 18, 'mcUSD', 'Moola interest bearing CUSD'),
+  [ChainId.ALFAJORES]: new Token(
+    ChainId.ALFAJORES,
+    '0x3a0EA4e0806805527C750AB9b34382642448468D',
+    18,
+    'mcUSD',
+    'Moola interest bearing CUSD'
+  ),
+}
