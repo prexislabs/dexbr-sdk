@@ -1,8 +1,9 @@
-import { getAddress } from '@ethersproject/address'
-import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
 import warning from 'tiny-warning'
-import { BigintIsh, ChainId, CHAIN_INFO, ONE, SolidityType, SOLIDITY_TYPE_MAXIMA, THREE, TWO, ZERO } from './constants'
+import JSBI from 'jsbi'
+import { getAddress } from '@ethersproject/address'
+
+import { BigintIsh, ZERO, ONE, TWO, THREE, SolidityType, SOLIDITY_TYPE_MAXIMA } from './constants'
 
 export function validateSolidityTypeInstance(value: JSBI, solidityType: SolidityType): void {
   invariant(JSBI.greaterThanOrEqual(value, ZERO), `${value} is not a ${solidityType}.`)
@@ -77,40 +78,5 @@ export function sortedInsert<T>(items: T[], add: T, maxSize: number, comparator:
     }
     items.splice(lo, 0, add)
     return isFull ? items.pop()! : null
-  }
-}
-
-/**
- * Parses a Celo chain ID number into a ChainId enum instance.
- * @param chainId The chain ID as a number.
- */
-export const parseNetwork = (chainId: number): ChainId => {
-  if (!Object.values(ChainId).includes(chainId)) {
-    throw new Error(`Unknown Celo chain ID: ${chainId}`)
-  }
-  return chainId as ChainId
-}
-
-export function getBlockscoutLink(
-  chainId: ChainId,
-  data: string,
-  type: 'transaction' | 'token' | 'address' | 'block'
-): string {
-  const prefix = CHAIN_INFO[chainId].blockscoutURL
-
-  switch (type) {
-    case 'transaction': {
-      return `${prefix}/tx/${data}`
-    }
-    case 'token': {
-      return `${prefix}/tokens/${data}`
-    }
-    case 'block': {
-      return `${prefix}/blocks/${data}`
-    }
-    case 'address':
-    default: {
-      return `${prefix}/address/${data}`
-    }
   }
 }

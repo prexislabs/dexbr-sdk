@@ -1,116 +1,98 @@
-import JSBI from 'jsbi'
 import invariant from 'tiny-invariant'
+import JSBI from 'jsbi'
+import { getNetwork } from '@ethersproject/networks'
+import { getDefaultProvider } from '@ethersproject/providers'
+import { Contract } from '@ethersproject/contracts'
+
 import { ChainId, SolidityType } from '../constants'
+import ERC20 from '../abis/ERC20.json'
 import { validateAndParseAddress, validateSolidityTypeInstance } from '../utils'
 
-/**
- * Represents an ERC20 token with a unique address and some metadata.
- */
+let CACHE: { [chainId: number]: { [address: string]: number } } = {
+  [ChainId.MAINNET]: {
+    '0xE0B7927c4aF23765Cb51314A0E0521A9645F0E2A': 9 // DGD
+  }
+}
+
 export class Token {
+  public readonly chainId: ChainId
+  public readonly address: string
   public readonly decimals: number
   public readonly symbol?: string
   public readonly name?: string
 
-  public readonly chainId: ChainId
-  public readonly address: string
+  static async fetchData(
+    chainId: ChainId,
+    address: string,
+    provider = getDefaultProvider(getNetwork(chainId)),
+    symbol?: string,
+    name?: string
+  ): Promise<Token> {
+    const parsedDecimals =
+      typeof CACHE?.[chainId]?.[address] === 'number'
+        ? CACHE[chainId][address]
+        : await new Contract(address, ERC20, provider).decimals().then((decimals: number): number => {
+            CACHE = {
+              ...CACHE,
+              [chainId]: {
+                ...CACHE?.[chainId],
+                [address]: decimals
+              }
+            }
+            return decimals
+          })
+    return new Token(chainId, address, parsedDecimals, symbol, name)
+  }
 
-  /**
-   * Constructs an instance of the base class `Currency`.
-   * @param decimals decimals of the currency
-   * @param symbol symbol of the currency
-   * @param name of the currency
-   */
-  public constructor(chainId: ChainId, address: string, decimals: number, symbol?: string, name?: string) {
+  constructor(chainId: ChainId, address: string, decimals: number, symbol?: string, name?: string) {
     validateSolidityTypeInstance(JSBI.BigInt(decimals), SolidityType.uint8)
-    this.decimals = decimals
-    this.symbol = symbol
-    this.name = name
 
     this.chainId = chainId
     this.address = validateAndParseAddress(address)
+    this.decimals = decimals
+    if (typeof symbol === 'string') this.symbol = symbol
+    if (typeof name === 'string') this.name = name
   }
 
-  /**
-   * Returns true if the two tokens are equivalent, i.e. have the same chainId and address.
-   * @param other other token to compare
-   */
-  public equals(other: Token): boolean {
-    // short circuit on reference equality
-    if (this === other) {
-      return true
+  equals(other: Token): boolean {
+    const equal = this.chainId === other.chainId && this.address === other.address
+    if (equal) {
+      invariant(this.decimals === other.decimals, 'DECIMALS')
+      if (this.symbol && other.symbol) invariant(this.symbol === other.symbol, 'SYMBOL')
+      if (this.name && other.name) invariant(this.name === other.name, 'NAME')
     }
-    return this.chainId === other.chainId && this.address === other.address
+    return equal
   }
 
-  /**
-   * Returns true if the address of this token sorts before the address of the other token
-   * @param other other token to compare
-   * @throws if the tokens have the same address
-   * @throws if the tokens are on different chains
-   */
-  public sortsBefore(other: Token): boolean {
+  sortsBefore(other: Token): boolean {
     invariant(this.chainId === other.chainId, 'CHAIN_IDS')
     invariant(this.address !== other.address, 'ADDRESSES')
     return this.address.toLowerCase() < other.address.toLowerCase()
   }
 }
 
-/**
- * Compares two currencies for equality
- */
-export function currencyEquals(currencyA: Token, currencyB: Token): boolean {
-  return currencyA.equals(currencyB)
-}
-
-export const CELO = {
-  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0x471EcE3750Da237f93B8E339c536989b8978a438', 18, 'CELO', 'Celo'),
-  [ChainId.ALFAJORES]: new Token(ChainId.ALFAJORES, '0xF194afDf50B03e69Bd7D057c1Aa9e10c9954E4C9', 18, 'CELO', 'Celo'),
-  [ChainId.BAKLAVA]: new Token(ChainId.BAKLAVA, '0x765DE816845861e75A25fCA122bb6898B8B1282a', 18, 'CELO', 'Celo')
-}
-
-export const cUSD = {
+export const WETH = {
   [ChainId.MAINNET]: new Token(
     ChainId.MAINNET,
-    '0x765DE816845861e75A25fCA122bb6898B8B1282a',
+    '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
     18,
-    'cUSD',
-    'Celo Dollar'
+    'WETH',
+    'Wrapped Ether'
   ),
-  [ChainId.ALFAJORES]: new Token(
-    ChainId.ALFAJORES,
-    '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
+  [ChainId.ROPSTEN]: new Token(
+    ChainId.ROPSTEN,
+    '0xc778417E063141139Fce010982780140Aa0cD5Ab',
     18,
-    'cUSD',
-    'Celo Dollar'
+    'WETH',
+    'Wrapped Ether'
   ),
-  [ChainId.BAKLAVA]: new Token(
-    ChainId.ALFAJORES,
-    '0x765DE816845861e75A25fCA122bb6898B8B1282a',
+  [ChainId.RINKEBY]: new Token(
+    ChainId.RINKEBY,
+    '0xc778417E063141139Fce010982780140Aa0cD5Ab',
     18,
-    'cUSD',
-    'Celo Dollar'
-  )
-}
-
-export const cEUR = {
-  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73', 18, 'cEUR', 'Celo Euro'),
-  [ChainId.ALFAJORES]: new Token(
-    ChainId.ALFAJORES,
-    '0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F',
-    18,
-    'cEUR',
-    'Celo Euro'
+    'WETH',
+    'Wrapped Ether'
   ),
-  [ChainId.BAKLAVA]: new Token(ChainId.BAKLAVA, '0xf9ecE301247aD2CE21894941830A2470f4E774ca', 18, 'cEUR', 'Celo Euro')
-}
-
-export const cREAL = {
-  [ChainId.MAINNET]: new Token(ChainId.MAINNET, '0xe8537a3d056DA446677B9E9d6c5dB704EaAb4787', 18, 'cREAL', 'Celo Brazilian REAL'),
-  [ChainId.ALFAJORES]: new Token(
-    ChainId.ALFAJORES,
-    '0xE4D517785D091D3c54818832dB6094bcc2744545',
-    18,
-    'cREAL',
-    'Celo Brazilian REAL'
-  ),
+  [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6', 18, 'WETH', 'Wrapped Ether'),
+  [ChainId.KOVAN]: new Token(ChainId.KOVAN, '0xd0A1E359811322d97991E03f863a0C30C2cF029C', 18, 'WETH', 'Wrapped Ether')
 }

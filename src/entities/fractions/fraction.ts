@@ -27,26 +27,26 @@ export class Fraction {
   public readonly numerator: JSBI
   public readonly denominator: JSBI
 
-  public constructor(numerator: BigintIsh, denominator: BigintIsh = ONE) {
+  constructor(numerator: BigintIsh, denominator: BigintIsh = ONE) {
     this.numerator = parseBigintIsh(numerator)
     this.denominator = parseBigintIsh(denominator)
   }
 
   // performs floor division
-  public get quotient(): JSBI {
+  get quotient(): JSBI {
     return JSBI.divide(this.numerator, this.denominator)
   }
 
   // remainder after floor division
-  public get remainder(): Fraction {
+  get remainder(): Fraction {
     return new Fraction(JSBI.remainder(this.numerator, this.denominator), this.denominator)
   }
 
-  public invert(): Fraction {
+  invert(): Fraction {
     return new Fraction(this.denominator, this.numerator)
   }
 
-  public add(other: Fraction | BigintIsh): Fraction {
+  add(other: Fraction | BigintIsh): Fraction {
     const otherParsed = other instanceof Fraction ? other : new Fraction(parseBigintIsh(other))
     if (JSBI.equal(this.denominator, otherParsed.denominator)) {
       return new Fraction(JSBI.add(this.numerator, otherParsed.numerator), this.denominator)
@@ -60,7 +60,7 @@ export class Fraction {
     )
   }
 
-  public subtract(other: Fraction | BigintIsh): Fraction {
+  subtract(other: Fraction | BigintIsh): Fraction {
     const otherParsed = other instanceof Fraction ? other : new Fraction(parseBigintIsh(other))
     if (JSBI.equal(this.denominator, otherParsed.denominator)) {
       return new Fraction(JSBI.subtract(this.numerator, otherParsed.numerator), this.denominator)
@@ -74,7 +74,7 @@ export class Fraction {
     )
   }
 
-  public lessThan(other: Fraction | BigintIsh): boolean {
+  lessThan(other: Fraction | BigintIsh): boolean {
     const otherParsed = other instanceof Fraction ? other : new Fraction(parseBigintIsh(other))
     return JSBI.lessThan(
       JSBI.multiply(this.numerator, otherParsed.denominator),
@@ -82,7 +82,7 @@ export class Fraction {
     )
   }
 
-  public equalTo(other: Fraction | BigintIsh): boolean {
+  equalTo(other: Fraction | BigintIsh): boolean {
     const otherParsed = other instanceof Fraction ? other : new Fraction(parseBigintIsh(other))
     return JSBI.equal(
       JSBI.multiply(this.numerator, otherParsed.denominator),
@@ -90,7 +90,7 @@ export class Fraction {
     )
   }
 
-  public greaterThan(other: Fraction | BigintIsh): boolean {
+  greaterThan(other: Fraction | BigintIsh): boolean {
     const otherParsed = other instanceof Fraction ? other : new Fraction(parseBigintIsh(other))
     return JSBI.greaterThan(
       JSBI.multiply(this.numerator, otherParsed.denominator),
@@ -98,7 +98,7 @@ export class Fraction {
     )
   }
 
-  public multiply(other: Fraction | BigintIsh): Fraction {
+  multiply(other: Fraction | BigintIsh): Fraction {
     const otherParsed = other instanceof Fraction ? other : new Fraction(parseBigintIsh(other))
     return new Fraction(
       JSBI.multiply(this.numerator, otherParsed.numerator),
@@ -106,7 +106,7 @@ export class Fraction {
     )
   }
 
-  public divide(other: Fraction | BigintIsh): Fraction {
+  divide(other: Fraction | BigintIsh): Fraction {
     const otherParsed = other instanceof Fraction ? other : new Fraction(parseBigintIsh(other))
     return new Fraction(
       JSBI.multiply(this.numerator, otherParsed.denominator),
@@ -114,7 +114,7 @@ export class Fraction {
     )
   }
 
-  public toSignificant(
+  toSignificant(
     significantDigits: number,
     format: object = { groupSeparator: '' },
     rounding: Rounding = Rounding.ROUND_HALF_UP
@@ -129,7 +129,7 @@ export class Fraction {
     return quotient.toFormat(quotient.decimalPlaces(), format)
   }
 
-  public toFixed(
+  toFixed(
     decimalPlaces: number,
     format: object = { groupSeparator: '' },
     rounding: Rounding = Rounding.ROUND_HALF_UP

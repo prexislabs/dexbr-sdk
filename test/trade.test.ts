@@ -1,7 +1,5 @@
 import JSBI from 'jsbi'
-import { CELO, ChainId, Pair, Percent, Route, Token, TokenAmount, Trade, TradeType } from '../src'
-
-const CELO_CURRENCY = CELO[ChainId.MAINNET]
+import { ChainId, Pair, Percent, Route, Token, TokenAmount, Trade, TradeType } from '../src'
 
 describe('Trade', () => {
   const token0 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000001', 18, 't0')
@@ -15,50 +13,7 @@ describe('Trade', () => {
   const pair_1_2 = new Pair(new TokenAmount(token1, JSBI.BigInt(1200)), new TokenAmount(token2, JSBI.BigInt(1000)))
   const pair_1_3 = new Pair(new TokenAmount(token1, JSBI.BigInt(1200)), new TokenAmount(token3, JSBI.BigInt(1300)))
 
-  const pair_weth_0 = new Pair(
-    new TokenAmount(CELO[ChainId.MAINNET], JSBI.BigInt(1000)),
-    new TokenAmount(token0, JSBI.BigInt(1000))
-  )
-
   const empty_pair_0_1 = new Pair(new TokenAmount(token0, JSBI.BigInt(0)), new TokenAmount(token1, JSBI.BigInt(0)))
-
-  it('can be constructed with CELO_CURRENCY as input', () => {
-    const trade = new Trade(
-      new Route([pair_weth_0], CELO_CURRENCY),
-      new TokenAmount(CELO_CURRENCY, JSBI.BigInt(100)),
-      TradeType.EXACT_INPUT
-    )
-    expect(trade.inputAmount.currency).toEqual(CELO_CURRENCY)
-    expect(trade.outputAmount.currency).toEqual(token0)
-  })
-  it('can be constructed with CELO_CURRENCY as input for exact output', () => {
-    const trade = new Trade(
-      new Route([pair_weth_0], CELO_CURRENCY, token0),
-      new TokenAmount(token0, JSBI.BigInt(100)),
-      TradeType.EXACT_OUTPUT
-    )
-    expect(trade.inputAmount.currency).toEqual(CELO_CURRENCY)
-    expect(trade.outputAmount.currency).toEqual(token0)
-  })
-
-  it('can be constructed with CELO_CURRENCY as output', () => {
-    const trade = new Trade(
-      new Route([pair_weth_0], token0, CELO_CURRENCY),
-      new TokenAmount(CELO_CURRENCY, JSBI.BigInt(100)),
-      TradeType.EXACT_OUTPUT
-    )
-    expect(trade.inputAmount.currency).toEqual(token0)
-    expect(trade.outputAmount.currency).toEqual(CELO_CURRENCY)
-  })
-  it('can be constructed with CELO_CURRENCY as output for exact input', () => {
-    const trade = new Trade(
-      new Route([pair_weth_0], token0, CELO_CURRENCY),
-      new TokenAmount(token0, JSBI.BigInt(100)),
-      TradeType.EXACT_INPUT
-    )
-    expect(trade.inputAmount.currency).toEqual(token0)
-    expect(trade.outputAmount.currency).toEqual(CELO_CURRENCY)
-  })
 
   describe('#bestTradeExactIn', () => {
     it('throws with empty pairs', () => {
@@ -135,35 +90,6 @@ describe('Trade', () => {
         token2
       )
       expect(result).toHaveLength(0)
-    })
-
-    it('works for CELO_CURRENCY currency input', () => {
-      const result = Trade.bestTradeExactIn(
-        [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
-        new TokenAmount(CELO_CURRENCY, JSBI.BigInt(100)),
-        token3
-      )
-      expect(result).toHaveLength(2)
-      expect(result[0].inputAmount.currency).toEqual(CELO_CURRENCY)
-      expect(result[0].route.path).toEqual([CELO[ChainId.MAINNET], token0, token1, token3])
-      expect(result[0].outputAmount.currency).toEqual(token3)
-      expect(result[1].inputAmount.currency).toEqual(CELO_CURRENCY)
-      expect(result[1].route.path).toEqual([CELO[ChainId.MAINNET], token0, token3])
-      expect(result[1].outputAmount.currency).toEqual(token3)
-    })
-    it('works for CELO_CURRENCY currency output', () => {
-      const result = Trade.bestTradeExactIn(
-        [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
-        new TokenAmount(token3, JSBI.BigInt(100)),
-        CELO_CURRENCY
-      )
-      expect(result).toHaveLength(2)
-      expect(result[0].inputAmount.currency).toEqual(token3)
-      expect(result[0].route.path).toEqual([token3, token0, CELO[ChainId.MAINNET]])
-      expect(result[0].outputAmount.currency).toEqual(CELO_CURRENCY)
-      expect(result[1].inputAmount.currency).toEqual(token3)
-      expect(result[1].route.path).toEqual([token3, token1, token0, CELO[ChainId.MAINNET]])
-      expect(result[1].outputAmount.currency).toEqual(CELO_CURRENCY)
     })
   })
 
@@ -360,35 +286,6 @@ describe('Trade', () => {
         new TokenAmount(token2, JSBI.BigInt(10))
       )
       expect(result).toHaveLength(0)
-    })
-
-    it('works for CELO_CURRENCY currency input', () => {
-      const result = Trade.bestTradeExactOut(
-        [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
-        CELO_CURRENCY,
-        new TokenAmount(token3, JSBI.BigInt(100))
-      )
-      expect(result).toHaveLength(2)
-      expect(result[0].inputAmount.currency).toEqual(CELO_CURRENCY)
-      expect(result[0].route.path).toEqual([CELO[ChainId.MAINNET], token0, token1, token3])
-      expect(result[0].outputAmount.currency).toEqual(token3)
-      expect(result[1].inputAmount.currency).toEqual(CELO_CURRENCY)
-      expect(result[1].route.path).toEqual([CELO[ChainId.MAINNET], token0, token3])
-      expect(result[1].outputAmount.currency).toEqual(token3)
-    })
-    it('works for CELO_CURRENCY currency output', () => {
-      const result = Trade.bestTradeExactOut(
-        [pair_weth_0, pair_0_1, pair_0_3, pair_1_3],
-        token3,
-        new TokenAmount(CELO_CURRENCY, JSBI.BigInt(100))
-      )
-      expect(result).toHaveLength(2)
-      expect(result[0].inputAmount.currency).toEqual(token3)
-      expect(result[0].route.path).toEqual([token3, token0, CELO[ChainId.MAINNET]])
-      expect(result[0].outputAmount.currency).toEqual(CELO_CURRENCY)
-      expect(result[1].inputAmount.currency).toEqual(token3)
-      expect(result[1].route.path).toEqual([token3, token1, token0, CELO[ChainId.MAINNET]])
-      expect(result[1].outputAmount.currency).toEqual(CELO_CURRENCY)
     })
   })
 })

@@ -1,13 +1,12 @@
-import invariant from 'tiny-invariant'
-import { CELO as _CGLD, ChainId, Pair, Rounding, Route, Token, TokenAmount, Trade, TradeType } from '../src'
+import { ChainId, WETH as _WETH, TradeType, Rounding, Token, TokenAmount, Pair, Route, Trade } from '../src'
 
 const ADDRESSES = [
   '0x0000000000000000000000000000000000000001',
   '0x0000000000000000000000000000000000000002',
   '0x0000000000000000000000000000000000000003'
 ]
-const CHAIN_ID = ChainId.ALFAJORES
-const CGLD = _CGLD[ChainId.ALFAJORES]
+const CHAIN_ID = ChainId.RINKEBY
+const WETH = _WETH[ChainId.RINKEBY]
 const DECIMAL_PERMUTATIONS: [number, number, number][] = [
   [0, 0, 0],
   [0, 9, 18],
@@ -44,7 +43,7 @@ describe('entities', () => {
           ),
           new Pair(
             new TokenAmount(tokens[2], decimalize(1, tokens[2].decimals)),
-            new TokenAmount(CGLD, decimalize(1234, CGLD.decimals))
+            new TokenAmount(WETH, decimalize(1234, WETH.decimals))
           )
         ]
       })
@@ -53,14 +52,12 @@ describe('entities', () => {
       it('Route', () => {
         route = new Route(pairs, tokens[0])
         expect(route.pairs).toEqual(pairs)
-        expect(route.path).toEqual(tokens.concat([CGLD]))
+        expect(route.path).toEqual(tokens.concat([WETH]))
         expect(route.input).toEqual(tokens[0])
-        expect(route.output).toEqual(CGLD)
+        expect(route.output).toEqual(WETH)
       })
 
       it('Price:Route.midPrice', () => {
-        invariant(route.input instanceof Token)
-        invariant(route.output instanceof Token)
         expect(route.midPrice.quote(new TokenAmount(route.input, decimalize(1, route.input.decimals)))).toEqual(
           new TokenAmount(route.output, decimalize(1234, route.output.decimals))
         )
@@ -104,13 +101,13 @@ describe('entities', () => {
             [
               new Pair(
                 new TokenAmount(tokens[1], decimalize(5, tokens[1].decimals)),
-                new TokenAmount(CGLD, decimalize(10, CGLD.decimals))
+                new TokenAmount(WETH, decimalize(10, WETH.decimals))
               )
             ],
             tokens[1]
           )
           const inputAmount = new TokenAmount(tokens[1], decimalize(1, tokens[1].decimals))
-          const expectedOutputAmount = new TokenAmount(CGLD, '1662497915624478906')
+          const expectedOutputAmount = new TokenAmount(WETH, '1662497915624478906')
           const trade = new Trade(route, inputAmount, TradeType.EXACT_INPUT)
           expect(trade.route).toEqual(route)
           expect(trade.tradeType).toEqual(TradeType.EXACT_INPUT)
@@ -125,11 +122,11 @@ describe('entities', () => {
           expect(trade.nextMidPrice.toSignificant(18)).toEqual('1.38958368072925352')
           expect(trade.nextMidPrice.invert().toSignificant(18)).toEqual('0.71964')
 
-          expect(trade.priceImpact.toSignificant(18)).toEqual('16.8751042187760547')
+          expect(trade.slippage.toSignificant(18)).toEqual('16.8751042187760547')
         })
 
         it('TradeType.EXACT_OUTPUT', () => {
-          const outputAmount = new TokenAmount(CGLD, '1662497915624478906')
+          const outputAmount = new TokenAmount(WETH, '1662497915624478906')
           const expectedInputAmount = new TokenAmount(tokens[1], decimalize(1, tokens[1].decimals))
           const trade = new Trade(route, outputAmount, TradeType.EXACT_OUTPUT)
           expect(trade.route).toEqual(route)
@@ -145,7 +142,7 @@ describe('entities', () => {
           expect(trade.nextMidPrice.toSignificant(18)).toEqual('1.38958368072925352')
           expect(trade.nextMidPrice.invert().toSignificant(18)).toEqual('0.71964')
 
-          expect(trade.priceImpact.toSignificant(18)).toEqual('16.8751042187760547')
+          expect(trade.slippage.toSignificant(18)).toEqual('16.8751042187760547')
         })
 
         it('minimum TradeType.EXACT_INPUT', () => {
@@ -155,8 +152,8 @@ describe('entities', () => {
                 new Pair(
                   new TokenAmount(tokens[1], decimalize(1, tokens[1].decimals)),
                   new TokenAmount(
-                    CGLD,
-                    decimalize(10, CGLD.decimals) +
+                    WETH,
+                    decimalize(10, WETH.decimals) +
                       (tokens[1].decimals === 9 ? BigInt('30090280812437312') : BigInt('30090270812437322'))
                   )
                 )
@@ -166,7 +163,7 @@ describe('entities', () => {
             const outputAmount = new TokenAmount(tokens[1], '1')
             const trade = new Trade(route, outputAmount, TradeType.EXACT_INPUT)
 
-            expect(trade.priceImpact.toSignificant(18)).toEqual(
+            expect(trade.slippage.toSignificant(18)).toEqual(
               tokens[1].decimals === 9 ? '0.300000099400899902' : '0.3000000000000001'
             )
           }
@@ -174,7 +171,7 @@ describe('entities', () => {
       })
 
       it('TokenAmount', () => {
-        const amount = new TokenAmount(CGLD, '1234567000000000000000')
+        const amount = new TokenAmount(WETH, '1234567000000000000000')
         expect(amount.toExact()).toEqual('1234.567')
         expect(amount.toExact({ groupSeparator: ',' })).toEqual('1,234.567')
       })

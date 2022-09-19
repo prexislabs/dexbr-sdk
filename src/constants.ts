@@ -4,9 +4,11 @@ import JSBI from 'jsbi'
 export type BigintIsh = JSBI | bigint | string
 
 export enum ChainId {
-  MAINNET = 42220,
-  ALFAJORES = 44787,
-  BAKLAVA = 62320
+  MAINNET = 1,
+  ROPSTEN = 3,
+  RINKEBY = 4,
+  GÖRLI = 5,
+  KOVAN = 42
 }
 
 export enum TradeType {
@@ -20,9 +22,9 @@ export enum Rounding {
   ROUND_UP
 }
 
-export const FACTORY_ADDRESS = '0x62d5b84bE28a183aBB507E125B384122D2C25fAE'
+export const FACTORY_ADDRESS = '0x337AcF82afCD415922084d11531D191F712B6117'
 
-export const INIT_CODE_HASH = '0xb3b8ff62960acea3a88039ebcf80699f15786f1b17cebd82802f7375827a339c'
+export const INIT_CODE_HASH = '0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f'
 
 export const MINIMUM_LIQUIDITY = JSBI.BigInt(1000)
 
@@ -45,28 +47,4 @@ export enum SolidityType {
 export const SOLIDITY_TYPE_MAXIMA = {
   [SolidityType.uint8]: JSBI.BigInt('0xff'),
   [SolidityType.uint256]: JSBI.BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
-}
-
-interface ChainInfo {
-  name: string
-  fornoURL: string
-  blockscoutURL: string
-}
-
-export const CHAIN_INFO: { [K in ChainId]: ChainInfo } = {
-  [ChainId.ALFAJORES]: {
-    name: 'Alfajores',
-    fornoURL: 'https://alfajores-forno.celo-testnet.org',
-    blockscoutURL: 'https://alfajores-blockscout.celo-testnet.org'
-  },
-  [ChainId.BAKLAVA]: {
-    name: 'Baklava',
-    fornoURL: 'https://baklava-forno.celo-testnet.org',
-    blockscoutURL: 'https://baklava-blockscout.celo-testnet.org'
-  },
-  [ChainId.MAINNET]: {
-    name: 'Mainnet',
-    fornoURL: 'https://forno.celo.org',
-    blockscoutURL: 'https://explorer.celo.org'
-  }
 }

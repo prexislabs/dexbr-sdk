@@ -1,44 +1,39 @@
 import invariant from 'tiny-invariant'
-import { ChainId } from '../constants'
-import { Price } from './fractions/price'
+
+import { Token } from './token'
 import { Pair } from './pair'
-import { CELO, Token } from './token'
+import { Price } from './fractions/price'
 
 export class Route {
   public readonly pairs: Pair[]
   public readonly path: Token[]
-  public readonly input: Token
-  public readonly output: Token
   public readonly midPrice: Price
 
-  public constructor(pairs: Pair[], input: Token, output?: Token) {
+  constructor(pairs: Pair[], input: Token) {
     invariant(pairs.length > 0, 'PAIRS')
     invariant(
-      pairs.every(pair => pair.chainId === pairs[0].chainId),
+      pairs.map(pair => pair.token0.chainId === pairs[0].token0.chainId).every(x => x),
       'CHAIN_IDS'
     )
-    invariant(input instanceof Token && pairs[0].involvesToken(input), 'INPUT')
-    invariant(
-      typeof output === 'undefined' || (output instanceof Token && pairs[pairs.length - 1].involvesToken(output)),
-      'OUTPUT'
-    )
-
-    const path: Token[] = [input instanceof Token ? input : CELO[pairs[0].chainId]]
+    const path = [input]
     for (const [i, pair] of pairs.entries()) {
       const currentInput = path[i]
       invariant(currentInput.equals(pair.token0) || currentInput.equals(pair.token1), 'PATH')
       const output = currentInput.equals(pair.token0) ? pair.token1 : pair.token0
       path.push(output)
     }
+    invariant(path.length === new Set(path).size, 'PATH')
 
     this.pairs = pairs
     this.path = path
     this.midPrice = Price.fromRoute(this)
-    this.input = input
-    this.output = output ?? path[path.length - 1]
   }
 
-  public get chainId(): ChainId {
-    return this.pairs[0].chainId
+  get input(): Token {
+    return this.path[0]
+  }
+
+  get output(): Token {
+    return this.path[this.path.length - 1]
   }
 }

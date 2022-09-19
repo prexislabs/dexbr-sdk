@@ -1,12 +1,12 @@
 {
-  "include": ["src/"],
+  "include": ["src", "test"],
   "compilerOptions": {
     "target": "es2018",
     "module": "esnext",
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,
-    "rootDir": "./src",
+    "rootDir": "./",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
