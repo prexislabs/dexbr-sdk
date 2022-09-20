@@ -2378,7 +2378,7 @@ detect-newline@^2.1.0:
 
 "dexbr-v2-core@https://github.com/prexislabs/dexbr-v2-core":
   version "2.0.0"
-  resolved "https://github.com/prexislabs/dexbr-v2-core#29452d21086b065eeffebb57c4c7c3c35570f9df"
+  resolved "https://github.com/prexislabs/dexbr-v2-core#e4156c3cd5a6cf85e118e38638ad8261b0411f70"
 
 diff-sequences@^24.9.0:
   version "24.9.0"
