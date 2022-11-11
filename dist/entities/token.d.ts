@@ -11,9 +11,5 @@ export declare class Token {
     sortsBefore(other: Token): boolean;
 }
 export declare const WETH: {
-    1: Token;
-    4: Token;
     5: Token;
-    42: Token;
-    97: Token;
 };
