@@ -9,9 +9,9 @@ import ERC20 from '../abis/ERC20.json'
 import { validateAndParseAddress, validateSolidityTypeInstance } from '../utils'
 
 let CACHE: { [chainId: number]: { [address: string]: number } } = {
-  // [ChainId.MAINNET]: {
-  //   '0xE0B7927c4aF23765Cb51314A0E0521A9645F0E2A': 9 // DGD
-  // }
+  [ChainId.MAINNET]: {
+    '0xE0B7927c4aF23765Cb51314A0E0521A9645F0E2A': 9 // DGD
+  }
 }
 
 export class Token {
@@ -72,6 +72,13 @@ export class Token {
 }
 
 export const WETH = {
+  [ChainId.MAINNET]: new Token(
+    ChainId.MAINNET,
+    '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+    18,
+    'WETH',
+    'Wrapped Ether'
+  ),
   [ChainId.GÖRLI]: new Token(
     ChainId.GÖRLI, '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6', 
     18,
