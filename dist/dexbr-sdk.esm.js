@@ -18,6 +18,7 @@ var ChainId;
 (function (ChainId) {
   ChainId[ChainId["MAINNET"] = 1] = "MAINNET";
   ChainId[ChainId["G\xD6RLI"] = 5] = "G\xD6RLI";
+  ChainId[ChainId["TBSC"] = 97] = "TBSC";
 })(ChainId || (ChainId = {}));
 
 var TradeType;
@@ -35,7 +36,7 @@ var Rounding;
   Rounding[Rounding["ROUND_UP"] = 2] = "ROUND_UP";
 })(Rounding || (Rounding = {}));
 
-var FACTORY_ADDRESS = '0x6F2Ae3724E498459F601a8C39fb1644020cd9D62';
+var FACTORY_ADDRESS = '0xF1997225Ed6b76fB7a2D95dA53F987B946c15A9A';
 var INIT_CODE_HASH = '0x4bc312006898edda53e49849c59c1a7f70be33c5b1a8dc4a1e42c5815afd10a0';
 var MINIMUM_LIQUIDITY = /*#__PURE__*/JSBI.BigInt(1000); // exports for internal consumption
 
