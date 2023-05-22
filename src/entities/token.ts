@@ -91,4 +91,10 @@ export const WETH = {
     'WETH',
     'Wrapped Ether'
   ),
+  [ChainId.BSC]: new Token(
+    ChainId.BSC, '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', 
+    18,
+    'WETH',
+    'Wrapped Ether'
+  ),
 }
