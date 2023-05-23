@@ -86,7 +86,7 @@ export const WETH = {
     'Wrapped Ether'
   ),
   [ChainId.TBSC]: new Token(
-    ChainId.TBSC, '0x84d6973e569ec73BbA68650DabB58257C6F13740', 
+    ChainId.TBSC, '0x862aBff36479C8926955B05f2c6A8B58fbc14056', 
     18,
     'WETH',
     'Wrapped Ether'
