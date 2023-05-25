@@ -12,7 +12,6 @@ export declare class Token {
 }
 export declare const WETH: {
     1: Token;
-    5: Token;
     97: Token;
     56: Token;
 };
