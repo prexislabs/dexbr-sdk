@@ -19,6 +19,7 @@ var ChainId;
   ChainId[ChainId["MAINNET"] = 1] = "MAINNET";
   ChainId[ChainId["TBSC"] = 97] = "TBSC";
   ChainId[ChainId["BSC"] = 56] = "BSC";
+  ChainId[ChainId["GOERLI"] = 5] = "GOERLI";
 })(ChainId || (ChainId = {}));
 
 var TradeType;

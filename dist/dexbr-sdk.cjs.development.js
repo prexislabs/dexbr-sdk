@@ -23,6 +23,7 @@ var _SOLIDITY_TYPE_MAXIMA;
   ChainId[ChainId["MAINNET"] = 1] = "MAINNET";
   ChainId[ChainId["TBSC"] = 97] = "TBSC";
   ChainId[ChainId["BSC"] = 56] = "BSC";
+  ChainId[ChainId["GOERLI"] = 5] = "GOERLI";
 })(exports.ChainId || (exports.ChainId = {}));
 
 (function (TradeType) {
