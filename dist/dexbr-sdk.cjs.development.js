@@ -23,6 +23,7 @@ var _SOLIDITY_TYPE_MAXIMA;
   ChainId[ChainId["MAINNET"] = 1] = "MAINNET";
   ChainId[ChainId["TBSC"] = 97] = "TBSC";
   ChainId[ChainId["BSC"] = 56] = "BSC";
+  ChainId[ChainId["GOERLI"] = 5] = "GOERLI";
 })(exports.ChainId || (exports.ChainId = {}));
 
 (function (TradeType) {
@@ -432,7 +433,7 @@ var Token = /*#__PURE__*/function () {
 
   return Token;
 }();
-var WETH = (_WETH = {}, _WETH[exports.ChainId.MAINNET] = /*#__PURE__*/new Token(exports.ChainId.MAINNET, '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 18, 'WETH', 'Wrapped Ether'), _WETH[exports.ChainId.TBSC] = /*#__PURE__*/new Token(exports.ChainId.TBSC, '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd', 18, 'WETH', 'Wrapped Ether'), _WETH[exports.ChainId.BSC] = /*#__PURE__*/new Token(exports.ChainId.BSC, '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', 18, 'WETH', 'Wrapped Ether'), _WETH);
+var WETH = (_WETH = {}, _WETH[exports.ChainId.MAINNET] = /*#__PURE__*/new Token(exports.ChainId.MAINNET, '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 18, 'WETH', 'Wrapped Ether'), _WETH[exports.ChainId.TBSC] = /*#__PURE__*/new Token(exports.ChainId.TBSC, '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd', 18, 'WETH', 'Wrapped Ether'), _WETH[exports.ChainId.BSC] = /*#__PURE__*/new Token(exports.ChainId.BSC, '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', 18, 'WETH', 'Wrapped Ether'), _WETH[exports.ChainId.GOERLI] = /*#__PURE__*/new Token(exports.ChainId.GOERLI, '0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6', 18, 'WETH', 'Wrapped Ether'), _WETH);
 
 var _toSignificantRoundin, _toFixedRounding;
 var Decimal = /*#__PURE__*/toFormat(_Decimal);
